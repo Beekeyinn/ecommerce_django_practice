@@ -1,0 +1,29 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+    <div class="row" >
+        {% if request.GET.q %}
+        <div class="col-12 mb-3">
+            Result for {{request.GET.q}}
+            <hr>
+        </div>
+        {% endif %}
+    {% for obj in object_list %}
+        <div class="col" >
+            {% include 'product/snippet/card.html' with instance=obj %}
+
+            {% if forloop.counter|divisibleby:3 %}
+                </div> </div><div class="row" >
+                    <div class="col-12" >
+                        <hr />
+                    </div>
+            {% elif forloop.counter|divisibleby:2 %}
+            </div> </div><div class="row" >
+                    <div class="col-12" >
+                        <hr />
+                    </div>
+                {% else %}
+                </div>
+            {% endif %}
+    {% endfor %}
+    </div>
+{% endblock  %}

@@ -1,0 +1,33 @@
+{% extends "includes/base.html" %}
+
+{% load static %}
+
+{% block title %}
+  {{title}}
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-12 col-md-6" >
+    <dl>
+      <dd>
+        <img src="{{ object.image.url }}" class="img-fluid">
+      </dd>
+      <dt>Title:</dt>
+      <dd>{{ object.title }}</dd>
+      <p>{{ object.timestamp | timesince }} ago</p>
+      <dt>Description:</dt>
+      <dd>
+        {{object.description|linebreaks}}
+      </dd>
+        <p>Created at {{ object.timestamp|date }}</p>
+      <dt>Price:</dt>
+      <dd>{{object.price}}</dd>
+  </dl>
+  </div>
+  <div class="col-12 col-md-6" >
+      {% include 'product/snippet/add_to_cart.html' with product=object cart=cart %}
+  </div>
+
+</div>
+  
+{% endblock %}

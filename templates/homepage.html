@@ -1,0 +1,14 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock  %}
+{% block content %}
+  {% if request.user.is_authenticated %}
+    <h3 class="bg-info text-info">{{ logger }}</h3>
+  {% endif %}
+
+  <h2 class="text-center">{{ title }}</h2>
+
+  <p class="text-center">
+    {{ content }}
+  </p>
+{% endblock %}

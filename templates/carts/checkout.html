@@ -1,0 +1,52 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+<h1>Checkout</h1>
+{{order.id}}---{{order.cart}}
+{% if not billing_profile %}
+    <div class="row" >
+        <div class="col-12 col-md-6">
+            {% include 'accounts/snippets/form.html' with form=login_form next_url=request.build_absolute_uri %}
+        </div>
+        <div class="col-12 col-md-6" >
+            Continue as a Guest
+            {% url "guest_register" as guest_register_url %}
+            {% include 'accounts/snippets/form.html' with form=guest_form next_url=request.build_absolute_uri action_url=guest_register_url %}
+        </div>
+    </div>
+{% else %}
+    {% if not order.shipping_address  %}
+        <div class ="row">
+            <div class="col-md-6 mx-auto col-10">
+                <p class="lead">Shipping Address</p>
+                <hr>
+                {% url "Addresses:shipping_address" as shipping_address_url %}
+                {% include 'addresses/snippets/form.html' with form=address_form next_url=request.build_absolute_uri action_url=shipping_address_url address_type="shipping"  %}
+            </div>
+        </div>
+    {% elif not order.billing_address %}
+            <div class ="row">
+            <div class="col-md-6 mx-auto col-10">
+            <p class="lead">Billing Address</p>
+            <hr>
+            {% url "Addresses:shipping_address" as shipping_address_url %}
+            {% include 'addresses/snippets/form.html' with form=address_form next_url=request.build_absolute_uri action_url=shipping_address_url address_type="billing"  %}
+        </div>
+    </div>
+    {% else %}
+        <dl>
+            <dt class="text-info fa-2x" >Finalize Checkout</dt>
+            <dt>Cart Total:</dt>
+                <dd>{{ order.cart.total }}</dd>
+            <dt>Shipping Total:</dt>
+                <dd>{{order.shipping_total}}</dd>
+            <dt>Order Total:</dt>
+                <dd>{{order.total}}</dd>
+        </dl>
+        <form class="form" action="" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-success" >Checkout</button>                 
+        </form> 
+    {% endif %}
+
+{% endif %}
+{% endblock  %}

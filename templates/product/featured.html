@@ -1,0 +1,18 @@
+<ul>
+  {% for obj in object_list %}
+
+    <li>
+      <ol>
+        <li>
+          <a href="{% url 'featured_detail' id=obj.id %}">{{obj.title}}</a>
+        </li>
+        <li>
+          <img src="{{ obj.image.url }}" height="100">
+        </li>
+        <li>{{obj.description}}</li>
+        <li>{{obj.price}}</li>
+      </ol>
+    </li>
+
+  {% endfor %}
+</ul>

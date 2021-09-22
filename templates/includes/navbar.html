@@ -1,0 +1,93 @@
+<h1></h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'homepage' %}">
+      {% if brand_name %}
+        {{brand_name}}
+      {% else %}
+        eCommerce
+      {% endif %}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item ">
+          <a class="nav-link {% if request.resolver_match.url_name == 'homepage' %}
+            active
+        {% endif %} " aria-current="page" href="{% url 'homepage' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}
+            active
+        {% endif %} " href="{% url 'about' %}">About</a>
+        </li>
+        
+
+        <li class="nav-item">
+          <a class="nav-link
+            {% if request.resolver_match.url_name == 'contact' %}
+                active
+            {% endif %}
+            " href="{% url 'contact' %}">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link
+            {% if request.resolver_match.url_name == 'products' %}
+                active
+            {% endif %}
+            " href="{% url 'products:products' %}">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link
+            {% if request.resolver_match.url_name == 'home' %}
+                active
+            {% endif %}
+            " href="{% url 'Carts:home' %}"> <i class="fa fa-cart-plus" ></i>
+              {% if request.session.cart_items > 0 %}
+                <sup class="text-info fs-5 fw-bold">{{request.session.cart_items}}</sup> 
+              {% endif %}           
+            </a>
+        </li>
+      </ul>
+      {% include 'search/snippet/search_form.html' %}
+      <div class="dropdown open ms-3">
+          <a class="nav-link dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+                <i class="fa fa-users" aria-hidden="true"></i>{% if request.user.is_authenticated %}
+                  {{ request.user|capfirst }}
+                {% else %}
+                  Account
+                {% endif %}
+              </a>
+          <div class="dropdown-menu" aria-labelledby="triggerId">
+             {% if not request.user.is_authenticated %}
+            <li class="nav-item">
+          <a class="nav-link
+            {% if request.resolver_match.url_name == 'login' %}
+                active
+            {% endif %}
+          " href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link
+            {% if request.resolver_match.url_name == 'register' %}
+                active
+            {% endif %}
+          " href="{% url 'register' %}">Register</a>
+        </li>
+        {% else %}
+            <li class="nav-item">
+          <a class="nav-link
+            {% if request.resolver_match.url_name == 'login' %}
+                active
+            {% endif %}
+          " href="{% url 'logout' %}">Logout</a>
+        </li>
+        {% endif %}
+          </div>
+        </div>
+    </div>
+  </div>
+</nav>
