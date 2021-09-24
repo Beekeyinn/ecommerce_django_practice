@@ -47,7 +47,7 @@ def checkout_home(request):
 
 
     billing_profile, billing_profile_created = BillingProfile.objects.get_or_new(request)
-
+    address_qs = None
     # above logic
     # user = request.user
     # billing_profile=None
@@ -62,6 +62,8 @@ def checkout_home(request):
     # else:
     #     pass
     if billing_profile is not None:
+        if request.user.is_authenticated:
+            address_qs = Address.objects.filter(billing_profile=billing_profile)
         order_obj, order_obj_created = Order.objects.get_or_new(billing_profile, cart_obj)
         if shipping_address_id:
             order_obj.shipping_address = Address.objects.get(id=shipping_address_id)
@@ -77,7 +79,7 @@ def checkout_home(request):
             order_obj.mark_paid()
             request.session['cart_items'] = 0
             del request.session["cart_id"]
-            return redirect("/cart/success")
+            return redirect("Carts:success")
         # order_qs = Order.objects.filter(billing_profile=billing_profile,cart=cart_obj,active=True)
         # if order_qs.count()==1:
         #     order_obj = order_qs.first()
@@ -93,5 +95,10 @@ def checkout_home(request):
         "login_form":login_form,
         "guest_form":guest_form,
         "address_form":address_form,
+        "address_qs":address_qs
     }
     return render(request,'carts/checkout.html',context)
+
+
+def checkout_done_view(request):
+    return render(request,'carts/checkout_done.html')
