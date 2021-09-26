@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Cart</h1>
 {% if cart.products.exists %}
-<table class="table">
+<table class="table cart-table">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -10,23 +10,26 @@
       <th scope="col">Price</th>
     </tr>
   </thead>
-  <tbody>
-  {% for product in cart.products.all %}
-    <tr>
-      <th scope="row">{{ forloop.counter }}</th>
-      <td><a href="{{ product.get_absolute_url }}">{{product.title}}</a>  
-      {% include 'product/snippet/add_to_cart.html' with product=product cart=cart in_cart=True %} 
-      </td>
-      <td>{{ product.price }}</td>
-    </tr>
-  {% endfor %}
+  <tbody class='cart-body'>
+
+    {% for product in cart.products.all %}
+      <tr class='cart-product'>
+        <th scope="row" id='{{forloop.counter}}'>{{ forloop.counter }}</th>
+        <td><a href="{{ product.get_absolute_url }}">{{product.title}}</a>  
+        {% include 'carts/snippets/remove_product.html' with product_id=product.id%} 
+        </td>
+        <td>$ {{ product.price }}</td>
+      </tr>
+    {% endfor %}
+
+ 
   <tr>
       <th colspan="2" class="text-center">Sub Total</th>
-      <td><b>{{ cart.subtotal }}</b>  </td>
+      <td><b>$ <span class='cart-sub-total'>{{ cart.subtotal }}</span></b>  </td>
     </tr>
     <tr>
       <th colspan="2"class="text-center" ><b>Total</b></th>
-      <td> <b>  {{ cart.total }} </b></td>
+      <td> <b>$ <span class='cart-total'>{{ cart.total }}</span> </b></td>
     </tr>
     <tr>
       <th colspan="2" class="text-center" >
@@ -34,6 +37,9 @@
     </tr>
   </tbody>
 </table>
+<div class='cart-product-remove-form d-none'>
+{% include 'carts/snippets/remove_product.html' %}
+</div>
 {% else %}
     <p class="lead">Cart is empty  </p>
 {% endif %}

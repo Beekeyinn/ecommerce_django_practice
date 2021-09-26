@@ -1,15 +1,32 @@
+from django.shortcuts import redirect, render
+from django.http import JsonResponse
+
 from accounts.models import GuestEmail
 from carts.models import Cart
-from django.shortcuts import redirect, render
-
-from addresses.forms import AddressForm
-
 from addresses.models import Address
 from billing.models import BillingProfile
-from accounts.forms import GuestForm, LoginForm
 from products.models import Product
 from orders.models import Order
+
+from addresses.forms import AddressForm
+from accounts.forms import GuestForm, LoginForm
 # Create your views here.
+def cart_detail_api_view(request):
+    cart_obj, new_obj = Cart.objects.new_or_get(request)
+    # products =[]
+    # for x in cart_obj.products.all():
+    #     products.append({
+    #         "name":x.name,
+    #         "price":x.price,
+    #     })
+    products = [{"id":x.id,"name":x.title,"price":x.price,"url":x.get_absolute_url()}for x in cart_obj.products.all()]    # similar to above code
+    data = {
+        "products":products,
+        "subTotal":cart_obj.subtotal,
+        "total":cart_obj.total
+    }
+    return JsonResponse(data)
+
 
 def cart_home(request):
     cart_obj, new_obj = Cart.objects.new_or_get(request)
@@ -26,9 +43,22 @@ def cart_update(request):
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         if product_obj in cart_obj.products.all():
             cart_obj.products.remove(product_obj)
+            if cart_obj.total==0:
+                print(f"cart_id = { request.session['cart_id'] }")
+                Cart.objects.get(id= request.session['cart_id']).delete()
+            added=False
         else:     
             cart_obj.products.add(product_obj)
-        request.session["cart_items"] = cart_obj.products.count()
+            added=True
+        count = cart_obj.products.count()
+        request.session["cart_items"] = count
+        if request.is_ajax():
+            jsonData = {
+                "added": added,
+                "removed": not added,
+                "cart_items": count
+            }
+            return JsonResponse(jsonData)
     return redirect("Carts:home")
 
 def checkout_home(request):

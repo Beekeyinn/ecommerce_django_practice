@@ -1,3 +1,4 @@
+from carts.models import Cart
 from accounts.models import GuestEmail
 from django.shortcuts import render,redirect
 from django.utils.http import is_safe_url
@@ -47,6 +48,8 @@ def login_page(request):
             if is_safe_url(redirect_url, request.get_host()):
                 return redirect(redirect_url)
             else:
+                cart_obj, new_cart = Cart.objects.new_or_get(request)
+                request.session["cart_items"] = cart_obj.products.count()
                 return redirect("/")
         else:
             print("error")

@@ -9,7 +9,10 @@
       <h5 class="card-title">{{instance.title}}</h5>
       <p class="card-text">{{ instance.description }}</p>
       <p class="card-text" >{{ instance.price }}</p>
-      <a href="{{instance.get_absolute_url}}" class="btn btn-primary">view</a>
+      <div class="d-inline-flex">
+        <a href="{{instance.get_absolute_url}}" class="btn btn-primary mx-1">view</a>
+        {% include 'product/snippet/add_to_cart.html' with product=instance cart=cart %}      
+      </div>
     </div>
   </div>
 {% endif %}
