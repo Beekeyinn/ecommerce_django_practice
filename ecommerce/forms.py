@@ -33,3 +33,6 @@ class Contact_Form(forms.Form):
         if not "gmail.com" in email:
             raise forms.ValidationError(" Email Address must be G mail. ")
         return email
+
+    # def clean_message(self):
+    #     raise forms.ValidationError("Try Error")

@@ -1,4 +1,4 @@
-{% extends "includes/base.html" %}
+{% extends 'includes/base.html' %}
 
 {% load static %}
 
@@ -6,15 +6,17 @@
   {{title}}
 {% endblock %}
 {% block content %}
-  <h1 class="text-center text-capitalize">{{ title }}</h1>
-  <p class="text-center">
+  <h1 class='text-center text-capitalize'>{{ title }}</h1>
+  <p class='text-center'>
     {{ content }}
   </p>
+  <div class='col-sm-6 col-md-6 col-12 offset-3'>
+      <form class='contact-form'  action="{% url 'contact' %}" method='post'>
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class='btn btn-secondary'>Submit</button>
 
-  <form class="col-sm-3 offset-4" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit">
-
-  </form>
+      </form>
+  </div>
+  
 {% endblock %}

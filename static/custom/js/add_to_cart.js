@@ -1,4 +1,93 @@
 $(document).ready(function () {
+	// COntact Form handler
+	var contactForm = $(".contact-form");
+	var contactFormMethod = contactForm.attr("method");
+	var contactFormEndPoint = contactForm.attr("action");
+	var contactFormSubmitBtn = contactForm.find("[type='submit']");
+	var contactFormSubmitBtnTxt = contactFormSubmitBtn.val();
+
+	function displaySending(submitBtn, defaultText, doSomething) {
+		if (doSomething)
+		{
+			console.log("displaying");
+			submitBtn.addClass("disabled");
+			submitBtn.html("<i class='fa fa-spin fa-spinner' ></i> Sending...");
+		} else {
+			submitBtn.removeClass("disabled");
+			submitBtn.html(defaultText);
+		}
+	}
+
+	contactForm.submit(function (event) {
+		event.preventDefault();
+		
+		var contactFormSubmitBtn = contactForm.find("[type='submit']");
+		var contactFormSubmitBtnTxt = contactFormSubmitBtn.text();
+		
+		var contactFormData = contactForm.serialize();
+		thisForm = $(this);
+
+		displaySending(contactFormSubmitBtn, "", true);
+		$.ajax({
+			type: contactFormMethod,
+			url: contactFormEndPoint,
+			data: contactFormData,
+			success: function (data) {
+				thisForm[0].reset();
+				displaySending(contactFormSubmitBtn, contactFormSubmitBtnTxt, false);
+				$.alert({
+					title: "Success",
+					content: "Thank You for submission.",
+					theme: "modern",
+				});
+			},
+			error: function (error) {
+				console.log(error);
+				errData = error.responseJSON;
+				console.log(errData);
+				displaySending(contactFormSubmitBtn, contactFormSubmitBtnTxt, false);
+
+				$.each(errData, function (key, value) {
+					keyValidation = thisForm.find("[name='" + key + "']").parent();
+					appendValue =
+						"<span><li class='text-danger mx-4'>" +
+						value[0].message +
+						"</li></span>";
+					keyValidation.append(appendValue);
+				});
+				// $.alert({
+				// 	title: "Oops!",
+				// 	content: "An Error Occurred",
+				// 	theme: "modern",
+				// });
+			},
+		});
+	});
+
+	// Auto search
+	var searchForm = $(".search-form");
+	searchInput = searchForm.find("[name='q']");
+	submitBtn = searchForm.find("[type='submit']");
+	var typingTimer;
+	var typingInterval = 700;
+	searchInput.keyup(function (e) {
+		typingTimer = setTimeout(performSearch, typingInterval);
+	});
+	searchInput.keydown(function (e) {
+		clearTimeout(typingTimer);
+	});
+	function performSearch() {
+		submitBtn.addClass("disabled");
+		submitBtn.html("<i class='fa fa-spin fa-spinner' ></i> Searching");
+		var query = searchInput.val();
+		if (window.location.href.includes("search")) {
+			window.location.href = "?q=" + query;
+		} else {
+			window.location.href = "search/?q=" + query;
+		}
+	}
+
+	// Cart and Add Product
 	var cartForm = $(".form-product-ajax");
 	cartForm.submit(function (event) {
 		event.preventDefault();
@@ -22,13 +111,12 @@ $(document).ready(function () {
 					);
 				}
 				var cart_count = $(".navbar-cart-count");
-				if (data.cart_items > 0)
-				{
+				if (data.cart_items > 0) {
 					cart_count.text(data.cart_items);
-				}else{
+				} else {
 					cart_count.text("");
 				}
-				
+
 				var currentPath = window.location.href;
 				console.log(currentPath);
 				if (currentPath.includes("cart")) {
@@ -36,6 +124,11 @@ $(document).ready(function () {
 				}
 			},
 			error: function (errorData) {
+				$.alert({
+					title: "Opps!!!!",
+					content: "An Error Occurred!! please try again later",
+					theme: "modern",
+				});
 				console.error("ERROR: ", errorData);
 			},
 		});
@@ -88,6 +181,11 @@ $(document).ready(function () {
 				}
 			},
 			error: function (error) {
+				$.alert({
+					title: "Opps!!!!",
+					content: "An Error Occurred!! please try again later",
+					theme: "modern",
+				});
 				console.log(error);
 			},
 		});
