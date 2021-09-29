@@ -1,0 +1,58 @@
+[
+{
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+        "title": "HAt",
+        "slug": "HAt",
+        "description": "awesome hat",
+        "price": "39.99",
+        "image": "products/1bd5a39f18f96accf7aea5242d517746bf321c6f156fe36f6f5d30815b0ff75f.jpg",
+        "timestamp": "2021-09-08T13:24:30.439Z",
+        "featured": true,
+        "active": true
+    }
+},
+{
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+        "title": "MAt",
+        "slug": "MAt",
+        "description": "awesome mat",
+        "price": "49.99",
+        "image": "products/4dbcf277d4dcef9f33908800a250c944--anime-qoutes-manga-quotes.jpg",
+        "timestamp": "2021-09-08T13:24:30.439Z",
+        "featured": false,
+        "active": true
+    }
+},
+{
+    "model": "products.product",
+    "pk": 3,
+    "fields": {
+        "title": "BAt",
+        "slug": "BAt",
+        "description": "awesome bat",
+        "price": "50.99",
+        "image": "products/7055510745c6af29dcf01b4e4fbef730434b47601--be-kind-meaningful-quotes.jpg.jpg",
+        "timestamp": "2021-09-08T13:24:30.439Z",
+        "featured": false,
+        "active": true
+    }
+},
+{
+    "model": "products.product",
+    "pk": 4,
+    "fields": {
+        "title": "HAt",
+        "slug": "HAt-gox6",
+        "description": "Hat Again?",
+        "price": "8980.30",
+        "image": "products/6323548564dbcf277d4dcef9f33908800a250c944--anime-qoutes-manga-quotes.jpg.jpg",
+        "timestamp": "2021-09-08T13:24:30.439Z",
+        "featured": false,
+        "active": true
+    }
+}
+]
