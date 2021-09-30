@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'products.apps.ProductsConfig',
     'search.apps.SearchConfig',
     'tags.apps.TagsConfig',
@@ -45,9 +46,12 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'billing.apps.BillingConfig',
     'addresses.apps.AddressesConfig',
+    'analytics.apps.AnalyticsConfig',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
+FORCE_SESSION_TO_ONE=False
+FORCE_INACTIVE_USER_ENDSESSION = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
