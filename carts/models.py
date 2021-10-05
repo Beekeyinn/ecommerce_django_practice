@@ -10,11 +10,8 @@ User =settings.AUTH_USER_MODEL
 # Create your models here.
 class CartManager(models.Manager):
     def new_or_get(self, request):
-        if request.user.is_authenticated:
-            qs = self.get_queryset().filter(user=request.user)
-        else:
-            cart_id = request.session.get("cart_id",None)
-            qs = self.get_queryset().filter(id=cart_id)
+        cart_id = request.session.get("cart_id",None)
+        qs = self.get_queryset().filter(id=cart_id)
         if qs.count()==1:
             new_obj=False
             cart_obj = qs.first()

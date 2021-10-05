@@ -1,10 +1,12 @@
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
+from django.urls import reverse
 
 from accounts.models import GuestEmail
 from carts.models import Cart
 from addresses.models import Address
 from billing.models import BillingProfile
+from orders.forms import PaymentMethods
 from products.models import Product
 from orders.models import Order
 
@@ -71,6 +73,7 @@ def checkout_home(request):
     login_form = LoginForm()
     guest_form = GuestForm()
     address_form = AddressForm()
+    method_form = PaymentMethods()
 
     billing_address_id = request.session.get("billing_address_id",None)
     shipping_address_id = request.session.get("shipping_address_id",None)
@@ -103,13 +106,18 @@ def checkout_home(request):
             order_obj.save()
         
     if request.method == "POST":
-        is_done = order_obj.check_done()
-        print(is_done)
-        if is_done:
-            order_obj.mark_paid()
-            request.session['cart_items'] = 0
-            del request.session["cart_id"]
-            return redirect("Carts:success")
+        method = request.POST.get('payment_method')
+        if method == 'Cash on Delivery':
+            is_done = order_obj.check_done()
+            if is_done:
+                order_obj.payment_method = method
+                order_obj.mark_shipped()
+                request.session['cart_items'] = 0
+                del request.session["cart_id"]
+                return redirect("Carts:success")
+        elif method == 'Khalti':
+            order_obj.payment_method = method
+            return redirect(reverse('billings:khalti')+"?o_id="+str(order_obj.order_id))
         # order_qs = Order.objects.filter(billing_profile=billing_profile,cart=cart_obj,active=True)
         # if order_qs.count()==1:
         #     order_obj = order_qs.first()
@@ -125,7 +133,8 @@ def checkout_home(request):
         "login_form":login_form,
         "guest_form":guest_form,
         "address_form":address_form,
-        "address_qs":address_qs
+        "address_qs":address_qs,
+        "method_form":method_form
     }
     return render(request,'carts/checkout.html',context)
 

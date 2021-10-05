@@ -62,9 +62,12 @@
             <dt>Order Total:</dt>
                 <dd>{{order.total}}</dd>
         </dl>
+        <hr>
+        <h3>Pay with:</h3>
         <form class="form" action="" method="POST">
             {% csrf_token %}
-            <button type="submit" class="btn btn-outline-success" >Checkout</button>                 
+            {{method_form.as_p}}
+            <button type="submit" class="btn btn-outline-success" >Proceed to pay</button>                
         </form> 
     {% endif %}
 

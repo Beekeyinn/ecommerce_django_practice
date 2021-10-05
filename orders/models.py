@@ -9,10 +9,10 @@ from django.db.models.signals import pre_save, post_save
 
 # Create your models here.
 ORDER_STATUS_CHOICES = (
-    ('created','Created'),
-    ('paid','Paid'),
-    ('shipped','Shipped'),
-    ('refunded','Refunded'),
+    ('Created','Created'),
+    ('Paid','Paid'),
+    ('Shipped','Shipped'),
+    ('Refunded','Refunded'),
 )
 
 class OrderManager(models.Manager):
@@ -30,6 +30,11 @@ class OrderManager(models.Manager):
         return obj,created
 
 
+PAYMENT_METHODS = (
+    ("Cash on Delivery","Cash on Delivery"),
+    ("Khalti","Khalti"),
+)
+
 class Order(models.Model):
     order_id = models.CharField(max_length=120, blank=True)
     billing_profile = models.ForeignKey(BillingProfile,null=True, blank=True, on_delete=models.SET_NULL)
@@ -41,6 +46,7 @@ class Order(models.Model):
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     active= models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    payment_method = models.CharField(max_length=50,choices=PAYMENT_METHODS, default="Cash on Delivery")
 
 
     objects = OrderManager()
@@ -69,9 +75,16 @@ class Order(models.Model):
     
     def mark_paid(self):
         if self.check_done():
-            self.status = "paid"
+            self.status = "Paid"
             self.save()
         return self.status
+
+    def mark_shipped(self):
+        if self.check_done():
+            self.status = 'Shipped'
+            self.save()
+        return self.status
+
 
 
 def pre_save_create_order_id(instance, sender, *args, **kwargs):

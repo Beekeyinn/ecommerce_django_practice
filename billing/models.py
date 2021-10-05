@@ -1,10 +1,10 @@
 from accounts.models import GuestEmail
 from django.db import models
 from django.conf import settings
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 User = settings.AUTH_USER_MODEL
 
-# Create your models here.
+
 
 class BillingProfileManager(models.Manager):
     def get_or_new(self, request):
@@ -37,12 +37,15 @@ class BillingProfile(models.Model):
         return self.email
 
 
-# def billing_profile_created_receiver(sender, instance, created, *args, **kwargs):
-#     if created:
-#         print("send to stripe/ braintree ")
-#         instance.customer_id = newId
-#         instance.save()
+# def billing_profile_created_receiver(sender, instance, *args, **kwargs):
+#     if not instance.customer_id and instance.email:
+#         customer = stripe.Customer.create(
+#             email=instance.email
+#         )
+#         print(customer)
+#         instance.customer_id = customer.id
 
+# pre_save.connect(billing_profile_created_receiver,sender = BillingProfile)
 
 def user_created_receiver(sender, instance, created, *args, **kwargs):
     if created:

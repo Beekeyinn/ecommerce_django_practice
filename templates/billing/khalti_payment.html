@@ -1,0 +1,108 @@
+{% extends "includes/base.html" %}
+
+{% block content %}
+    <dl>
+        <dt>
+            Order Id:
+        </dt>
+        <dd>
+            {{order.order_id}}
+        </dd>
+        <dt>
+            Shipping Address:
+        </dt>
+        <dd>
+            {{order.shipping_address.get_address}}
+        </dd>
+        <dt>
+            Billing Address:
+        </dt>
+        <dd>
+             {{order.billing_address.get_address}}
+        </dd>
+        <dt>Cart Items:</dt>
+            {% for product in order.cart.products.all %}
+                <dt>{{product}}</dt>
+            {% endfor %} 
+        <dt>Cart Total:</dt>
+        <dd>{{order.cart.total}}</dd>
+        <dt>Shipping Total:</dt>
+            <dd>{{ order.shipping_total }}</dd>
+
+        <dt>Total:</dt>
+        <dd>{{order.total}}</dd>
+
+
+    </dl>
+    
+
+    
+    
+   
+    <!-- Place this where you need payment button -->
+    <button id="payment-button">Pay with Khalti</button>
+    <!-- Place this where you need payment button -->
+    <!-- Paste this code anywhere in you body tag -->
+    
+    <!-- Paste this code anywhere in you body tag -->
+<!-- Khalti Script -->
+{% if request.resolver_match.url_name == 'khalti' %}
+<script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+<script>
+        var config = {
+            // replace the publicKey with yours
+            "publicKey": "test_public_key_dc74e0fd57cb46cd93832aee0a390234",
+            "productIdentity": "order_{{order.order_id}}",
+            "productName": "Dragon",
+            "productUrl": "http://localhost:8000",
+            "paymentPreference": [
+                "KHALTI",
+                "SCT",
+                ],
+            "eventHandler": {
+                onSuccess (payload) {
+                    // hit merchant api for initiating verfication
+                    axios.post('{% url 'billings:khaltiverify' %}',{
+                        token: payload.token,
+                        amount: payload.amount,
+                        order_id: {{order.order_id}}
+                    }).then(function(res){
+                        console.log(res.data)
+                        if (res.data.success == true){
+                            $.alert({
+                                title: "Payment Successfull",
+                                content: "Thank you for Shopping. Please visit us again.",
+                                theme: "modern",
+				                })
+                                location.href('/')
+                        }
+                        else{
+                            $.alert({
+                                title: "Error Occurred",
+                                content: "Please try again after a while. sorry for your in convinence.",
+                                theme: "modern",
+				                })
+                            location.href('{{ request.build_absolute_uri }}')
+                        }
+                    })
+                    //console.log(payload);
+                },
+                onError (error) {
+                    console.log(error);
+                },
+                onClose () {
+                    console.log('widget is closing');
+                }
+            }
+        };
+
+        var checkout = new KhaltiCheckout(config);
+        var btn = document.getElementById("payment-button");
+        btn.onclick = function () {
+            // minimum transaction amount must be 10, i.e 1000 in paisa.
+            checkout.show({amount: {{order.total}} *100 });
+        }
+    </script>
+{% endif %}
+
+{% endblock  %}
