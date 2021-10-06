@@ -1,0 +1,78 @@
+{% extends "includes/base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class='col-6 col-sm-6 col-md-6 col-lg-6'>
+            <dl>
+                <dt>
+                    Order Id:
+                </dt>
+                <dd>
+                    {{order.order_id}}
+                </dd>
+                <dt>
+                    Shipping Address:
+                </dt>
+                <dd>
+                    {{order.shipping_address.get_address}}
+                </dd>
+                <dt>
+                    Billing Address:
+                </dt>
+                <dd>
+                    {{order.billing_address.get_address}}
+                </dd>
+                <dt>Cart Items:</dt>
+                    {% for product in order.cart.products.all %}
+                        <dt>{{product}}</dt>
+                    {% endfor %} 
+                <dt>Cart Total:</dt>
+                <dd>{{order.cart.total}}</dd>
+                <dt>Shipping Total:</dt>
+                    <dd>{{ order.shipping_total }}</dd>
+
+                <dt>Total:</dt>
+                <dd>{{order.total}}</dd>
+            </dl>
+        </div>
+        <div class='col-6 col-sm-6 col-md-6 col-lg-6 mb-3'>
+            <form action="https://uat.esewa.com.np/epay/main" method="POST">
+                <div class="form-group">
+                    <label for="pid">Order Id:</label>
+                    <input value="{{order.order_id}}" name="pid" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="amt">Amount:</label>
+                    <input value="{{order.cart.total}}" name="amt" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="txAmt">Tax Amount:</label>
+                    <input value="0" name="txAmt" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="psc">Product Service Charge</label>
+                    <input value="0" name="psc" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="pdc">Product Delivery Charge:</label>
+                    <input value="{{order.shipping_total}}" name="pdc" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="scd">Merchant service code</label>
+                    <input value="EPAYTEST" name="scd" type="text" class="form-control">
+                </div>
+                <div class="form-group d-none d-lg-none d-md-none d-sm-none">
+                    <label for="url">Urls:</label>
+                    <input value="http://127.0.0.1:8000{% url 'billings:esewa_verify' %}" type="text" name="su" class="form-control">
+                    <input value="{{ request.build_absolute_uri }}" type="text" name="fu" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="tAmt">Total Amount:</label>
+                    <input value="{{order.total}}" name="tAmt" type="text" class="form-control">
+                </div>
+                <input value="Submit" type="submit" class="btn btn-outline-primary">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

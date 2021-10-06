@@ -107,6 +107,7 @@ def checkout_home(request):
         
     if request.method == "POST":
         method = request.POST.get('payment_method')
+        
         if method == 'Cash on Delivery':
             is_done = order_obj.check_done()
             if is_done:
@@ -116,8 +117,9 @@ def checkout_home(request):
                 del request.session["cart_id"]
                 return redirect("Carts:success")
         elif method == 'Khalti':
-            order_obj.payment_method = method
             return redirect(reverse('billings:khalti')+"?o_id="+str(order_obj.order_id))
+        elif method == 'Esewa':
+            return redirect(reverse('billings:esewa_payment') + "?o_id=" + str(order_obj.order_id))
         # order_qs = Order.objects.filter(billing_profile=billing_profile,cart=cart_obj,active=True)
         # if order_qs.count()==1:
         #     order_obj = order_qs.first()

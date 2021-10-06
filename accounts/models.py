@@ -58,8 +58,6 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     def __str__(self):
-        if self.fullname:
-            return self.fullname
         return self.email
     
 

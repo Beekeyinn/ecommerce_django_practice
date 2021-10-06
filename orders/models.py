@@ -33,6 +33,7 @@ class OrderManager(models.Manager):
 PAYMENT_METHODS = (
     ("Cash on Delivery","Cash on Delivery"),
     ("Khalti","Khalti"),
+    ("Esewa","Esewa"),
 )
 
 class Order(models.Model):
