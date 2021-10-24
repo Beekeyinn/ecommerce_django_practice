@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import LoginView, RegisterView, guest_register_view
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth import views as auth_views
 
+
+from .views import AccountEmailActivationView, AccountHomeView
+from django.contrib.auth.views import LogoutView
+app_name="Accounts"
 urlpatterns = [
-    path('login/',LoginView.as_view(),name="login"),
-    path('register/',RegisterView.as_view(),name="register"),
-    path('logout',LogoutView.as_view(), name="logout"),
-    path('register/guest',guest_register_view,name="guest_register")
+    path('',AccountHomeView.as_view(),name='account'),
+    path('email/confirm/<slug:key>/',AccountEmailActivationView.as_view(),name="email_activate"),    
 ]

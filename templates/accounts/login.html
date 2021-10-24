@@ -6,11 +6,12 @@
   {{title}}
 {% endblock %}
 {% block content %}
-  <div class="col-sm-3 offset-3">
+  <div class="col-sm-5 offset-3">
     <h1>Login</h1>
     <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="my-1"><a class="link-info text-decoration-none" href="{% url 'password_reset' %}">Forgot Password</a></div>
         <input type="submit" value="Login">
       </form>
     </div>

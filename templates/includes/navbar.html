@@ -1,5 +1,4 @@
-<h1></h1>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="{% url 'homepage' %}">
       {% if brand_name %}
@@ -56,9 +55,13 @@
           <a class="nav-link dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true"
               aria-expanded="false">
                 <i class="fa fa-users" aria-hidden="true"></i>{% if request.user.is_authenticated %}
-                  {{ request.user|capfirst }}
+                  {% if request.user.fullname %}
+                    {{ request.user.fullname|capfirst }}
+                  {% else %}
+                      {{ request.user }}
+                  {% endif %}
                 {% else %}
-                  Account
+                  User
                 {% endif %}
               </a>
           <div class="dropdown-menu" aria-labelledby="triggerId">
@@ -78,13 +81,20 @@
           " href="{% url 'register' %}">Register</a>
         </li>
         {% else %}
+           <li class="nav-item">
+              <a class="nav-link
+                {% if request.resolver_match.url_name == 'login' %}
+                    active
+                {% endif %}
+              " href="{% url 'Accounts:account' %}">Settings</a>
+            </li>
             <li class="nav-item">
-          <a class="nav-link
-            {% if request.resolver_match.url_name == 'login' %}
-                active
-            {% endif %}
-          " href="{% url 'logout' %}">Logout</a>
-        </li>
+              <a class="nav-link
+                {% if request.resolver_match.url_name == 'login' %}
+                    active
+                {% endif %}
+              " href="{% url 'logout' %}">Logout</a>
+            </li>
         {% endif %}
           </div>
         </div>

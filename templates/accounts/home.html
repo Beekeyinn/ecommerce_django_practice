@@ -1,0 +1,78 @@
+{% extends 'includes/base.html' %}
+{% block title %}
+    Settings
+{% endblock  %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center">Account </h1>
+        </div>
+
+
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 my-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        Account Details
+                    </h4>
+                    <div class="list-group-item">
+                        <span class="row">
+                            <span class=" col-lg-4 col-4 col-sm-4 col-md-4 text-start">Fullname:</span>
+                            <span class="col-lg-4 col-4 col-sm-4 col-md-4 text-end">{{request.user.fullname}}</span>
+                            <span class="col-lg-4 col-4 col-sm-4 col-md-4 text-end"> <i class="fa fa-edit"></i> Change </span>
+                        </span>
+                    </div>
+                    <div class="list-group-item">
+                        <span class="row">
+                            <span class=" col-lg-4 col-4 col-sm-4 col-md-4 text-start">Password:</span>
+                            <span class="col-lg-8 col-8 col-sm-8 col-md-8 text-end"><a class="text-decoration-none link-dark" href="{% url 'password_change' %}"><i class="fa fa-edit"></i> Change</span></a>                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 my-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        Billing
+                    </h4>
+                    <div class="list-group">
+                        <span><a class="list-group-item" href="#">Address</a></span>
+                        <span><a class="list-group-item" href="#">Payment Methods</a></span>
+                        <span><a class="list-group-item"  href="#/">Orders</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 my-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        History
+                    </h4>
+                    <div class="list-group">
+                        <span><a class="list-group-item" href="#">Products</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 my-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        Support
+                    </h4>
+                    <div class="list-group">
+                        <span><a class="list-group-item" href="{% url 'about' %}">About</a></span>
+                        <span><a class="list-group-item" href="{% url 'contact' %}">Contact</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock  %}

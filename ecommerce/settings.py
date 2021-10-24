@@ -50,6 +50,13 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_URL='/login/'
+LOGIN_URL_REDIRECT = '/'
+
+LOGOUT_URL='/logout'
+LOGOUT_REDIRECT_URL = '/login/'
+
 FORCE_SESSION_TO_ONE=False
 FORCE_INACTIVE_USER_ENDSESSION = False
 
@@ -64,7 +71,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'
-LOGOUT_REDIRECT_URL = '/login/'
+
 
 
 TEMPLATES = [
@@ -145,3 +152,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Email Configurations
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "razzcrestha07@gmail.com"
+EMAIL_HOST_PASSWORD = "Beekeyinn$8048"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+BASE_URL = "127.0.0.1:8000"
+
+DEFAULT_FROM_EMAIL = 'Django ecommerce Email <razzcrestha07@gmail.com>'
+
+MANAGERS = (
+    ("Beekeyinn Shrestha","razzcrestha07@gmail.com"),
+)
+
+ADMINS = MANAGERS

@@ -1,0 +1,14 @@
+{% extends 'includes/base.html' %}
+{% block title %}Activation Error{% endblock  %}
+{% block content %}
+    <div class="my-5 text-center">
+        <h1 class="text-danger py-5 ">Activation Error Occured. Please Try again later.</h1>
+    </div>
+    <div class="col-4 col-lg-4 col-md-4 col-sm-4 offset-3 center" >
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input class="btn btn-primary" type="submit" value="Resend Activation">
+        </form>
+    </div>
+{% endblock  %}

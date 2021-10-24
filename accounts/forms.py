@@ -3,7 +3,11 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import authenticate, get_user_model
 from django.forms import widgets
 from django.http import request
+from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
+
+from accounts.models import EmailActivation
 
 User = get_user_model()
 
@@ -43,7 +47,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'active', 'admin', 'staff')
+        fields = ('email', 'password', 'is_active', 'admin', 'staff')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -124,7 +128,27 @@ class RegisterForm(forms.ModelForm):
         # Save the provided password in hashed format
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
-        # user.active=False
+        user.is_active=False
+        # obj,is_created = EmailActivation.objects.create(user=user)
+        # obj.send_activation()
+        
         if commit:
             user.save()
         return user
+
+
+class EmailReactivationForm(forms.Form):
+    email = forms.EmailField(label='Email Address',widget=forms.TextInput(attrs={
+        'class':'form-control',
+        'placeholder':'Enter Your email....'
+    }))
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        qs = EmailActivation.objects.email_exists(email)
+        if not qs.exists():
+            register_link =  reverse('register')
+
+            msg = f"""This email does not Exists. would you like to <a href='{register_link}' class="nav-link">register</a>"""
+            raise forms.ValidationError(mark_safe(msg))
+        return email

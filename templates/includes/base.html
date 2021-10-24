@@ -16,6 +16,13 @@
   <body>
     {% include "includes/navbar.html" with brand_name='eCommerce' %}
     <div class="container">
+    {% if messages %}     
+        {% for message in messages %}
+        <div {% if message.tags %} class="bg-{{ message.tags }} rounded-2 my-2"{% endif %}>
+          <h4 class="p-1">{{ message }}</h4>
+        </div>
+        {% endfor %}
+    {% endif %}
       {% block content %}{% endblock %}
     </div>
     {% include "includes/js.html" %}

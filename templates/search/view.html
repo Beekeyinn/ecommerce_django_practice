@@ -7,23 +7,28 @@
             <hr>
         </div>
         {% endif %}
-    {% for obj in object_list %}
-        <div class="col" >
-            {% include 'product/snippet/card.html' with instance=obj %}
+        {% if object_list %}
+            {% for obj in object_list %}
+                <div class="col" >
+                    {% include 'product/snippet/card.html' with instance=obj %}
 
-            {% if forloop.counter|divisibleby:3 %}
-                </div> </div><div class="row" >
-                    <div class="col-12" >
-                        <hr />
-                    </div>
-            {% elif forloop.counter|divisibleby:2 %}
-            </div> </div><div class="row" >
-                    <div class="col-12" >
-                        <hr />
-                    </div>
-                {% else %}
+                    {% if forloop.counter|divisibleby:3 %}
+                        </div> </div><div class="row" >
+                            <div class="col-12" >
+                                <hr />
+                            </div>
+                    {% elif forloop.counter|divisibleby:2 %}
+                    </div> </div>
+                    <div class="row" >
+                            <div class="col-12" >
+                                <hr />
+                            </div>
+                        {% else %}
                 </div>
-            {% endif %}
-    {% endfor %}
+                    {% endif %}
+                {% endfor %}
+        {% else %}
+            <h1 class="text-center" >Result Not Found</h1>
+        {% endif %}
     </div>
 {% endblock  %}

@@ -1,0 +1,10 @@
+Hello,
+
+Please active your Account for  {{email}}  by clicking the link below:
+
+{{path}}
+
+Once you activate , you can login!
+
+Thank You,
+<Ecommerce@gmail.com>
