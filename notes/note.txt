@@ -1,2 +1,12 @@
 backup fixtures:
-    python manage.py dumpdata products.Product --format json --indent 4 > products\fixtures\products.json
+    you can provide fixture directory in settings.py using variable FIXTURE_DIRS = [os.path.join(BASE_DIR,'fixture')]
+        
+        To dump data from model
+            syntax:
+                -python manage.py dumpdata [app_label.Model_name] --format [xml,json or ymal] --indent [0-9..] [dump file path with name]
+                example: 
+                    -python manage.py dumpdata products.Product --format json --indent 4 > products\fixtures\products.json
+        
+        To load data from fixture file
+            syntax:
+                -python manage.py loaddata [fixturefilename with path]
